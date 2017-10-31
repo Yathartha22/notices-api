@@ -14,7 +14,7 @@ This repo contains all the api's for the `Notices App`.
 
 [localhost:8000/api/v1/auth/register](https://localhost:8000/api/v1/auth/register/)
 
-**Dependencies**
+**Dependencies:**
 
 Run the following command:
 
