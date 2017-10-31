@@ -1,6 +1,6 @@
 # notices-api
 
-This repo contains all the api's for the `Notices App`.
+This reposiory contains all the api's for the `Notices App`.
 
 **accessing notices api**
 
