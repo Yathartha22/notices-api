@@ -2,7 +2,7 @@
 
 This repo contains all the api's for the `Notices App`.
 
-**accessing notices api**
+**accessing notices api (Application Programming Interface)**
 
 [localhost:8000/api/v1/notices](https://localhost:8000/api/v1/notices/)
 
