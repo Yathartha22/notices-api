@@ -1,20 +1,20 @@
 # notices-api
 
 This repo contains all the api's for the `Notices App`.
-
+:
 **accessing notices api**
 
 [localhost:8000/api/v1/notices](https://localhost:8000/api/v1/notices/)
 
-**accessing login api**
+**accessing login api:**
 
 [localhost:8000/api/v1/auth/login](https://localhost:8000/api/v1/auth/login/)
 
-**accessing signUp api**
+**accessing signUp api:**
 
 [localhost:8000/api/v1/auth/register](https://localhost:8000/api/v1/auth/register/)
 
-**Dependencies**
+**Dependencies:**
 
 Run the following command:
 
