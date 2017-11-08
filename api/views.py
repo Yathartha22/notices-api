@@ -45,7 +45,7 @@ class NoticeBranch(APIView):
 	serializer_class = Notice_Branch_Serializer
 	def post(self, request, format=None):
 		param = request.data
-		queryset = Api.objects.filter(branch=param["branch"])
+		queryset = Api.objects.filter(branch = branch.has(param["branch"]))
 		serializer = ApiSerializer(queryset, many=True)
 		return Response(serializer.data)
 

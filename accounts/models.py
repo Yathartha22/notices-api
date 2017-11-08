@@ -18,8 +18,8 @@ class AccountManager(BaseUserManager):
 		account = self.model(
 			email=self.normalize_email(email),
 			username=kwargs.get('username'),
-			firstname=kwargs.get('firstname', None),
-			lastname=kwargs.get('lastname', None),
+			fullname=kwargs.get('fullname', None),
+			phonenumber=kwargs.get('phonenumber', None),
 		)
 
 		account.set_password(password)
@@ -87,4 +87,3 @@ class Profile(models.Model):
         primary_key=False,
         null=True
     )
-

@@ -7,16 +7,20 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import check_password
 from django.core.exceptions import ObjectDoesNotExist
 
+class ProfileSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Profile
+		fields = ('branch', 'year' ,'image')
+
 class AccountSerializer(serializers.ModelSerializer):
 	password = serializers.CharField(write_only=True, required=True)
-
-	token = serializers.CharField(max_length=255, read_only=True)
+	token = serializers.CharField(max_length=500, read_only=True)
 
 	class Meta:
 		model = Account
 		fields = (
 		'id', 'email', 'username', 'date_created', 'date_modified',
-		'firstname', 'lastname', 'password', 'confirm_password', 'token' )
+		'fullname', 'password','phonenumber' ,'token' )
 		read_only_fields = ('date_created', 'date_modified')
 
 	def create(self, validated_data):
@@ -26,14 +30,9 @@ class AccountSerializer(serializers.ModelSerializer):
 		instance.email = validated_data.get('email', instance.email)
 		instance.username = validated_data.get('username',
 		instance.username)
-		instance.firstname = validated_data.get('firstname',
-		instance.firstname)
-		instance.lastname = validated_data.get('lastname',
-		instance.lastname)
+		instance.fullname = validated_data.get('fullname',
+		instance.fullname)
 		password = validated_data.get('password', None)
-		confirm_password = validated_data.get('confirm_password', None)
-		if password and password == confirm_password:
-			instance.set_password(password)
 		instance.save()
 		return instance
 
@@ -106,8 +105,3 @@ class AdminRegisterSerializer(serializers.ModelSerializer):
 
 	def create(self, validated_data):
 		return Account.objects.create_superuser(**validated_data)
-
-class ProfileSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Profile
-		fields = ('branch', 'year' ,'image')
