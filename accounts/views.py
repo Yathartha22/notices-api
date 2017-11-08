@@ -74,17 +74,35 @@ class ProfileView(APIView):
 	serializer_class = ProfileSerializer
 	queryset = Profile.objects.all()
 
-	def post(self, request, format=None):
+	def get(self, request, format=None):
 		current_user = request.user
+		acc = Account.objects.filter(pk=current_user.pk)
+		serializer = AccountSerializer(acc, many=True)
+		return Response(serializer.data)
+
+	def post(self, request, format=None):
 		param = request.data
-		profile = Profile.objects.filter(user=current_user.pk)
-		if profile:
-			serializer = ProfileSerializer(profile, many=True)
+		current_user = request.user
+		if 'image' not in param:
+			acc = Account.objects.filter(pk=current_user.pk)
+			acc.update(username=param['username'], fullname=param['fullname'], email=param['email'], phonenumber=param['phonenumber'])
+			serializer = AccountSerializer(acc, many=True)
 			return Response(serializer.data)
 		else:
-			serializer = ProfileSerializer(data=param)
-			if serializer.is_valid(raise_exception=True):
-				serializer.save(user=current_user)
-				new_data = serializer.data
-				return Response(new_data)
-			return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+			try:
+				# exist then update
+				profile = Profile.objects.get(user=request.user)
+				serializer = ProfileSerializer(profile, data=request.data, partial=True)
+				if serializer.is_valid():
+					serializer.save()
+					return Response(serializer.data)
+				else:
+					return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+			except Profile.DoesNotExist:
+				# not exist then create
+				serializer = ProfileSerializer(data=param)
+				if serializer.is_valid():
+					serializer.save(user=request.user)
+					return Response(serializer.data)
+				else:
+					return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
