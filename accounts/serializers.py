@@ -12,15 +12,24 @@ class ProfileSerializer(serializers.ModelSerializer):
 		model = Profile
 		fields = ('branch', 'year' ,'image')
 
+	def get(self, request, format=None):
+		try:
+			profile= Profile.objects.get(user=request.user)
+		except Profile.DoseNotExist:
+			return Response('404')
+		serializer = ProfileSerializer(profile)
+		return Response(serializer.data)
+
 class AccountSerializer(serializers.ModelSerializer):
 	password = serializers.CharField(write_only=True, required=True)
 	token = serializers.CharField(max_length=500, read_only=True)
+	profile = ProfileSerializer(read_only=True)
 
 	class Meta:
 		model = Account
 		fields = (
 		'id', 'email', 'username', 'date_created', 'date_modified',
-		'fullname', 'password','phonenumber' ,'token' )
+		'fullname', 'password','phonenumber','profile'  ,'token' )
 		read_only_fields = ('date_created', 'date_modified')
 
 	def create(self, validated_data):
