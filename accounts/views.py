@@ -85,7 +85,7 @@ class ProfileView(APIView):
 		current_user = request.user
 		if 'image' not in param:
 			acc = Account.objects.filter(pk=current_user.pk)
-			acc.update(username=param['username'], fullname=param['fullname'], email=param['email'], phonenumber=param['phonenumber'])
+			acc.update(username=param['username'], fullname=param['fullname'], email=param['email'], phonenumber=param['phone_no'])
 			serializer = AccountSerializer(acc, many=True)
 			return Response(serializer.data)
 		else:
