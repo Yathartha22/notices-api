@@ -2,14 +2,16 @@ from rest_framework import serializers
 from .models import Api
 
 class ApiSerializer(serializers.ModelSerializer):
+	notice_author = serializers.CharField(read_only=True)
 	class Meta:
 		model = Api
-		fields = ('id', 'notice_name', 'notice_desc', 'notice_author', 'notice_valid_till', 'notice_publish_date','year', 'branch', 'choices')
+		fields = '__all__'
 
 class AddNoticeSerializer(serializers.ModelSerializer):
+	notice_author = serializers.CharField(read_only=True)
 	class Meta:
 		model = Api
-		fields = ('id', 'notice_name', 'notice_desc', 'notice_author', 'notice_valid_till', 'notice_publish_date','year', 'branch','choices')
+		fields = '__all__'
 
 	def create(self, validated_data):
 			return Api.objects.create(**validated_data)
