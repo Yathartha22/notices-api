@@ -83,4 +83,4 @@ class YourNotices(APIView):
 			else:
 				return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 		except Api.DoesNotExist:
-			return Response("No Updates")
+			return Response("The notice does not exists")
