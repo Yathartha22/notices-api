@@ -29,7 +29,7 @@ class AddNotice(APIView):
 		serializer = AddNoticeSerializer(data=data)
 		if serializer.is_valid(raise_exception=True):
 			serializer.validated_data['notice_author'] = author_name
-			serializer.save()
+			serializer.save(user=current_user)
 			new_data = serializer.data
 			return Response(new_data)
 		return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
@@ -62,3 +62,25 @@ class NoticeBranchYear(APIView):
 		queryset = Api.objects.filter(branch=param['branch'], year=param['year'])
 		serializer = ApiSerializer(queryset, many=True)
 		return Response(serializer.data)
+
+class YourNotices(APIView):
+	permission_class = (IsAuthenticatedOrReadOnly,)
+	serializer_class = ApiSerializer
+
+	def get(self, request, format=None):
+		current_user =  request.user
+		queryset = Api.objects.filter(user=current_user.pk)
+		serializer = ApiSerializer(queryset, many=True)
+		return Response(serializer.data)
+
+	def post(self, request, format=None):
+		try:
+			notice = Api.objects.get(pk="12")
+			serializer = ApiSerializer(notice, data=request.data, partial=True)
+			if serializer.is_valid():
+				serializer.save()
+				return Response(serializer.data)
+			else:
+				return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+		except Api.DoesNotExist:
+			return Response("No Updates")
