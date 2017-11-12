@@ -74,9 +74,12 @@ class YourNotices(APIView):
 		return Response(serializer.data)
 
 	def post(self, request, format=None):
+		data = request.data
 		try:
-			notice = Api.objects.get(pk="12")
-			serializer = ApiSerializer(notice, data=request.data, partial=True)
+			# pk will be additional field that will be provided at the frontend.
+			pk = data['pk']
+			notice = Api.objects.get(pk=pk)
+			serializer = ApiSerializer(notice, data=data, partial=True)
 			if serializer.is_valid():
 				serializer.save()
 				return Response(serializer.data)
