@@ -87,7 +87,23 @@ class ProfileView(APIView):
 			acc = Account.objects.filter(pk=current_user.pk)
 			acc.update(username=param['username'], fullname=param['fullname'], email=param['email'], phonenumber=param['phone_no'])
 			serializer = AccountSerializer(acc, many=True)
-			return Response(serializer.data)
+			try:
+				profile = Profile.objects.get(user=request.user)
+				serializer2 = ProfileSerializer(profile, data=request.data, partial=True)
+				if serializer2.is_valid():
+					serializer2.save()
+					return Response(serializer2.data)
+				else:
+					return Response(serializer2.errors, status=HTTP_400_BAD_REQUEST)
+			except Profile.DoesNotExist:
+				# not exist then create
+				serializer2 = ProfileSerializer(data=param)
+				if serializer2.is_valid():
+					serializer2.save(user=request.user)
+					return Response(serializer2.data)
+				else:
+					return Response(serializer2.errors, status=HTTP_400_BAD_REQUEST)
+
 		else:
 			try:
 				# exist then update
