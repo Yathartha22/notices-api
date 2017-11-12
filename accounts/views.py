@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadyOnly
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.status import HTTP_400_BAD_REQUEST
 
 from django.http import Http404
@@ -70,7 +70,7 @@ class AdminRegister(APIView):
 
 class ProfileView(APIView):
 
-	permission_classes = (IsAuthenticatedOrReadyOnly,)
+	permission_classes = (IsAuthenticatedOrReadOnly,)
 	serializer_class = ProfileSerializer
 	queryset = Profile.objects.all()
 
