@@ -103,12 +103,12 @@ class LoginSerializer(serializers.Serializer):
 
 class AdminRegisterSerializer(serializers.ModelSerializer):
 	password = serializers.CharField(write_only=True, required=True)
-
+	profile = ProfileSerializer(read_only=True)
 	class Meta:
 		model = Account
 		fields = (
 		'id', 'email', 'username', 'date_created', 'date_modified',
-		'firstname', 'lastname', 'password', 'confirm_password', 'token' )
+		'fullname', 'password','phonenumber','profile'  ,'token' )
 		read_only_fields = ('date_created', 'date_modified')
 
 
