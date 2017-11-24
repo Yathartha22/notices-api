@@ -80,7 +80,7 @@ class Profile(models.Model):
 	User = get_user_model()
 	branch = models.CharField(max_length=20, null=True)
 	year = models.IntegerField(null=True)
-	image = models.ImageField(upload_to="accounts/images/", null=True, blank=True)
+	image = models.ImageField(upload_to="profile_images/", null=True, blank=True)
 	user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
