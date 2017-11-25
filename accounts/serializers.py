@@ -15,7 +15,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 	def get(self, request, format=None):
 		try:
 			profile= Profile.objects.get(user=request.user)
-		except Profile.DoseNotExist:
+		except Profile.DoesNotExist:
 			return Response('404')
 		serializer = ProfileSerializer(profile)
 		return Response(serializer.data)
@@ -23,13 +23,14 @@ class ProfileSerializer(serializers.ModelSerializer):
 class AccountSerializer(serializers.ModelSerializer):
 	password = serializers.CharField(write_only=True, required=True)
 	token = serializers.CharField(max_length=500, read_only=True)
-	profile = ProfileSerializer(read_only=True)
+	profile = serializers.SerializerMethodField()
 
 	class Meta:
 		model = Account
 		fields = (
 		'id', 'email', 'username', 'date_created', 'date_modified',
-		'fullname', 'password','phonenumber','profile'  ,'token' )
+		'fullname', 'password','phonenumber','profile',
+		'token' )
 		read_only_fields = ('date_created', 'date_modified')
 
 	def create(self, validated_data):
@@ -44,6 +45,13 @@ class AccountSerializer(serializers.ModelSerializer):
 		password = validated_data.get('password', None)
 		instance.save()
 		return instance
+
+	def get_profile(self, instance):
+		try:
+			profile= Profile.objects.get(user=instance)
+			return ProfileSerializer(profile).data
+		except Profile.DoesNotExist:
+				return ProfileSerializer().data
 
 	# def validate(self, data):
 	# 	'''
