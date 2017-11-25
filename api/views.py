@@ -69,7 +69,7 @@ class YourNotices(APIView):
 
 	def get(self, request, format=None):
 		current_user =  request.user
-		queryset = Api.objects.filter(user=current_user.pk)
+		queryset = Api.objects.filter(user=current_user.pk).order_by('-notice_publish_date')
 		serializer = ApiSerializer(queryset, many=True)
 		return Response(serializer.data)
 
