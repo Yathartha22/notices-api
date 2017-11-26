@@ -10,7 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 class ProfileSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Profile
-		fields = ('branch', 'year' ,'image')
+		fields = ('branch', 'year' ,'image', 'roll_no')
 
 	def get(self, request, format=None):
 		try:
