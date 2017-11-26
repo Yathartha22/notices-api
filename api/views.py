@@ -14,7 +14,7 @@ class ApiViewSet(APIView):
 	permission_class = (IsAuthenticatedOrReadOnly,)
 	serializer_class = ApiSerializer
 	def get(self, request, format=None):
-		queryset = Api.objects.all().order_by('-notice_publish_date')
+		queryset = Api.objects.filter(choices="all").order_by('-notice_publish_date')
 		serializer = ApiSerializer(queryset, many=True)
 		return Response(serializer.data)
 
@@ -40,7 +40,7 @@ class NoticeYear(APIView):
 
 	def post(self, request, format=None):
 		param = request.data
-		queryset = Api.objects.filter(year=param["year"], branch=None)
+		queryset = Api.objects.filter(year=param["year"], branch=None).order_by('-notice_publish_date')
 		serializer = ApiSerializer(queryset, many=True)
 		return Response(serializer.data)
 
@@ -49,7 +49,7 @@ class NoticeBranch(APIView):
 	serializer_class = Notice_Branch_Serializer
 	def post(self, request, format=None):
 		param = request.data
-		queryset = Api.objects.filter(branch = param["branch"], year=None)
+		queryset = Api.objects.filter(branch = param["branch"], year=None).order_by('-notice_publish_date')
 		serializer = ApiSerializer(queryset, many=True)
 		return Response(serializer.data)
 
@@ -59,7 +59,7 @@ class NoticeBranchYear(APIView):
 
 	def post(self, request, format=None):
 		param = request.data
-		queryset = Api.objects.filter(branch=param['branch'], year=param['year'])
+		queryset = Api.objects.filter(branch=param['branch'], year=param['year']).order_by('-notice_publish_date')
 		serializer = ApiSerializer(queryset, many=True)
 		return Response(serializer.data)
 
@@ -69,7 +69,7 @@ class YourNotices(APIView):
 
 	def get(self, request, format=None):
 		current_user =  request.user
-		queryset = Api.objects.filter(user=current_user.pk)
+		queryset = Api.objects.filter(user=current_user.pk).order_by('-notice_publish_date')
 		serializer = ApiSerializer(queryset, many=True)
 		return Response(serializer.data)
 

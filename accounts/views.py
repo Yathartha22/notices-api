@@ -92,17 +92,17 @@ class ProfileView(APIView):
 				serializer2 = ProfileSerializer(profile, data=request.data, partial=True)
 				if serializer2.is_valid():
 					serializer2.save()
-					return Response(serializer2.data)
+					return Response(serializer.data)
 				else:
-					return Response(serializer2.errors, status=HTTP_400_BAD_REQUEST)
+					return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 			except Profile.DoesNotExist:
 				# not exist then create
 				serializer2 = ProfileSerializer(data=param)
 				if serializer2.is_valid():
 					serializer2.save(user=request.user)
-					return Response(serializer2.data)
+					return Response(serializer.data)
 				else:
-					return Response(serializer2.errors, status=HTTP_400_BAD_REQUEST)
+					return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 		else:
 			try:
