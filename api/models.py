@@ -5,7 +5,7 @@ from accounts.models import Account
 
 class Api(models.Model):
 	User = get_user_model()
-	notice_name = models.CharField(max_length=20, null=True)
+	notice_name = models.CharField(max_length=100, null=True)
 	notice_desc = models.TextField()
 	notice_file = models.FileField(upload_to="notice_files/", null=True, blank=True)
 	notice_author = models.CharField(max_length=20, default='admin')

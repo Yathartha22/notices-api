@@ -22,17 +22,41 @@ class AddNotice(APIView):
 
 	permission_class = (IsAuthenticatedOrReadOnly,)
 	serializer_class = AddNoticeSerializer
+
 	def post(self, request, format=None):
 		data = request.data
 		current_user = request.user
 		author_name = Account.objects.get(pk=current_user.pk).fullname
-		serializer = AddNoticeSerializer(data=data)
-		if serializer.is_valid(raise_exception=True):
-			serializer.validated_data['notice_author'] = author_name
-			serializer.save(user=current_user)
-			new_data = serializer.data
-			return Response(new_data)
-		return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+		try:
+			# exist then update.
+			notice = Api.objects.get(pk=data['id'])
+			serializer = ApiSerializer(notice, data=data, partial=True)
+			if serializer.is_valid():
+				serializer.save()
+				return Response(serializer.data)
+			else:
+				return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+		except Api.DoesNotExist:
+			# does not exist then create new.
+			serializer = AddNoticeSerializer(data=data)
+			if serializer.is_valid(raise_exception=True):
+				serializer.validated_data['notice_author'] = author_name
+				serializer.save(user=current_user)
+				new_data = serializer.data
+				return Response(new_data)
+			return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+
+class DeleteNotice(APIView):
+	permission_class = (IsAuthenticatedOrReadOnly,)
+
+	def post(self, request, format=None):
+		pk = request.data['id']
+		try:
+			notice = Api.objects.get(pk=pk)
+			notice.delete()
+			return Response("Deleted")
+		except:
+			return Response("Error, no such notice")
 
 class NoticeYear(APIView):
 	permission_class = (IsAuthenticatedOrReadOnly,)
@@ -72,18 +96,3 @@ class YourNotices(APIView):
 		queryset = Api.objects.filter(user=current_user.pk).order_by('-notice_publish_date')
 		serializer = ApiSerializer(queryset, many=True)
 		return Response(serializer.data)
-
-	def post(self, request, format=None):
-		data = request.data
-		try:
-			# pk will be additional field that will be provided at the frontend.
-			pk = data['pk']
-			notice = Api.objects.get(pk=pk)
-			serializer = ApiSerializer(notice, data=data, partial=True)
-			if serializer.is_valid():
-				serializer.save()
-				return Response(serializer.data)
-			else:
-				return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
-		except Api.DoesNotExist:
-			return Response("The notice does not exists")
