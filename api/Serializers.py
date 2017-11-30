@@ -5,13 +5,15 @@ class ApiSerializer(serializers.ModelSerializer):
 	notice_author = serializers.CharField(read_only=True)
 	class Meta:
 		model = Api
-		exclude = ('user',)
+		fields = ('id' ,'notice_name', 'notice_desc', 'notice_file', 'notice_author', 'notice_valid_till',
+			'year', 'branch', 'choices')
 
 class AddNoticeSerializer(serializers.ModelSerializer):
 	notice_author = serializers.CharField(read_only=True)
 	class Meta:
 		model = Api
-		exclude = ('user',)
+		fields = ('id' ,'notice_name', 'notice_desc', 'notice_file', 'notice_author', 'notice_valid_till',
+			'year', 'branch', 'choices')
 
 	def create(self, validated_data):
 			return Api.objects.create(**validated_data)

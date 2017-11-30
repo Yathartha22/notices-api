@@ -64,9 +64,6 @@ class AccountSerializer(serializers.ModelSerializer):
 	# 	)
 	# 	return data
 
-
-
-
 class LoginSerializer(serializers.Serializer):
 	email = serializers.CharField(max_length=255, read_only=True)
 	username = serializers.CharField(max_length=255, required=True)
