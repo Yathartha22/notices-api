@@ -54,9 +54,9 @@ class DeleteNotice(APIView):
 		try:
 			notice = Api.objects.get(pk=pk)
 			notice.delete()
-			return Response("Deleted")
+			return Response("{status: Success}")
 		except:
-			return Response("Error, no such notice")
+			return Response("{status: Error}")
 
 class NoticeYear(APIView):
 	permission_class = (IsAuthenticatedOrReadOnly,)
