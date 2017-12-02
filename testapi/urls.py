@@ -24,5 +24,6 @@ from django.conf import settings
 urlpatterns = [
     url(r'^api/v1/', include('api.urls')),
 	url(r'^admin/', admin.site.urls),
-	url(r'^api/v1/auth/', include('accounts.urls'))
+	url(r'^api/v1/auth/', include('accounts.urls')),
+    url(r'^api/v1/', include('feedback.urls'))
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
