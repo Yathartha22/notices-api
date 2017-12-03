@@ -5,6 +5,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.status import HTTP_400_BAD_REQUEST
 
 from django.http import Http404
+from django.core.mail import send_mail
+from django.conf import settings
 
 from .serializers import (AccountSerializer, LoginSerializer, AdminRegisterSerializer,
 	ProfileSerializer)
@@ -28,7 +30,13 @@ class AuthRegister(APIView):
 	def post(self, request, format=None):
 		serializer = self.serializer_class(data=request.data)
 		if serializer.is_valid(raise_exception=True):
+			email_to = serializer.validated_data['email']
 			serializer.save()
+			subject = 'Message from Notices Team'
+			message = 'Thanks for registering with us.'
+			emailFrom = settings.EMAIL_HOST_USER
+			emailTo = email_to
+			send_mail(subject, message, emailFrom, [emailTo], fail_silently=True)
 			return Response(serializer.data,
 					status=status.HTTP_201_CREATED)
 		return Response(serializer.errors,

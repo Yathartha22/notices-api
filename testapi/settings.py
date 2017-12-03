@@ -29,6 +29,14 @@ DEBUG = True
 ALLOWED_HOSTS = ['192.168.43.215', 'localhost', '0.0.0.0', '192.168.43.146']
 
 
+#email services
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'noticesteam@gmail.com'
+EMAIL_HOST_PASSWORD = '*****'
+EMAIL_PORT = '587'
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -97,7 +105,6 @@ JWT_AUTH = {
 'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7),
 'JWT_AUTH_HEADER_PREFIX': 'JWT',
 }
-
 
 
 TEMPLATES = [
