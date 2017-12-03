@@ -16,7 +16,7 @@ class ApiSerializer(serializers.ModelSerializer):
 			return None
 		try:
 			image_url = Profile.objects.get(user=user_id).image.url
-		except ProfileDoesNotExists:
+		except Profile.DoesNotExist:
 			return None
 		return image_url
 
@@ -44,7 +44,7 @@ class Notice_Year_Serializer(serializers.ModelSerializer):
 			return None
 		try:
 			image_url = Profile.objects.get(user=user_id).image.url
-		except ProfileDoesNotExists:
+		except Profile.DoesNotExist:
 			return None
 		return image_url
 
@@ -61,7 +61,7 @@ class Notice_Branch_Serializer(serializers.ModelSerializer):
 			return None
 		try:
 			image_url = Profile.objects.get(user=user_id).image.url
-		except ProfileDoesNotExists:
+		except Profile.DoesNotExist:
 			return None
 		return image_url
 
@@ -78,6 +78,6 @@ class Notice_Branch_Year_Serializer(serializers.ModelSerializer):
 			return None
 		try:
 			image_url = Profile.objects.get(user=user_id).image.url
-		except ProfileDoesNotExists:
+		except Profile.DoesNotExist:
 			return None
 		return image_url
